@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>แบบทดสอบ: คุณคือ เกย์คิง หรือ เกย์ควีน? (33 ข้อ 4 ตัวเลือก)</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;600&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        body {
+            font-family: 'Kanit', sans-serif;
+            background: linear-gradient(135deg, #e0f2fe 0%, #f5f3ff 100%);
+            min-height: 100vh;
+        }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        .btn-gradient {
+            background: linear-gradient(90deg, #3b82f6 0%, #8b5cf6 100%);
+            transition: transform 0.2s, opacity 0.2s;
+        }
+        .btn-gradient:hover {
+            opacity: 0.9;
+            transform: translateY(-2px);
+        }
+        .progress-bar {
+            transition: width 0.3s ease-in-out;
+        }
+        .option-btn {
+            text-align: left;
+            width: 100%;
+            padding: 1rem;
+            border-radius: 0.75rem;
+            border: 2px solid #f3f4f6;
+            background-color: white;
+            transition: all 0.2s;
+            color: #374151;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+        }
+        .option-btn:hover {
+            border-color: #93c5fd;
+            background-color: #eff6ff;
+            transform: translateX(4px);
+        }
+    </style>
+</head>
+<body class="flex flex-col items-center justify-center p-4">
+
+    <div id="app" class="w-full max-w-lg glass-card rounded-3xl shadow-2xl p-6 md:p-10 text-center my-8">
+        <!-- Start Screen -->
+        <div id="start-screen">
+            <div class="mb-6 flex justify-center">
+                <div class="bg-blue-100 p-4 rounded-full">
+                    <i data-lucide="crown" class="w-12 h-12 text-blue-500 fill-current"></i>
+                </div>
+            </div>
+            <h1 class="text-3xl font-bold text-gray-800 mb-4">คุณคือ "เกย์คิง" หรือ "เกย์ควีน"?</h1>
+            <p class="text-gray-600 mb-8 text-lg">แบบทดสอบเวอร์ชันอัปเกรด 33 ข้อ พร้อม 4 ตัวเลือกสุดละเอียด!</p>
+            <button onclick="startQuiz()" class="btn-gradient w-full py-4 rounded-2xl text-white font-semibold text-xl shadow-lg">
+                เริ่มทำแบบทดสอบ
+            </button>
+        </div>
+
+        <!-- Quiz Screen -->
+        <div id="quiz-screen" class="hidden text-left">
+            <div class="flex justify-between items-center mb-6">
+                <span id="question-number" class="text-blue-600 font-semibold">ข้อที่ 1/33</span>
+                <div class="w-2/3 bg-gray-200 h-2 rounded-full overflow-hidden">
+                    <div id="progress" class="progress-bar h-full bg-blue-500" style="width: 3%;"></div>
+                </div>
+            </div>
+            <h2 id="question-text" class="text-xl font-medium text-gray-700 mb-8 min-h-[80px]"></h2>
+            <div id="options" class="space-y-3">
+                <!-- Options will be generated here -->
+            </div>
+        </div>
+
+        <!-- Result Screen -->
+        <div id="result-screen" class="hidden">
+            <div id="result-icon" class="mb-6 flex justify-center"></div>
+            <h3 class="text-lg text-gray-500 mb-2">ผลลัพธ์ของคุณคือ...</h3>
+            <h2 id="result-title" class="text-4xl font-bold mb-4"></h2>
+            <p id="result-desc" class="text-gray-600 mb-8 leading-relaxed"></p>
+            
+            <div class="grid grid-cols-2 gap-4 mb-8 text-center">
+                <div class="bg-blue-50 p-4 rounded-2xl border border-blue-100">
+                    <div class="text-blue-500 text-sm font-medium">คะแนนคิง (King)</div>
+                    <div id="king-score" class="text-2xl font-bold text-blue-700">0%</div>
+                </div>
+                <div class="bg-purple-50 p-4 rounded-2xl border border-purple-100">
+                    <div class="text-purple-500 text-sm font-medium">คะแนนควีน (Queen)</div>
+                    <div id="queen-score" class="text-2xl font-bold text-purple-700">0%</div>
+                </div>
+            </div>
+
+            <button onclick="resetQuiz()" class="bg-gray-100 hover:bg-gray-200 text-gray-700 w-full py-3 rounded-2xl font-medium transition-colors">
+                ทำใหม่อีกครั้ง
+            </button>
+        </div>
+    </div>
+
+    <script>
+        const questions = [
+            { q: "เมื่อคุณเจอคนที่ถูกใจ คุณมักจะทำอย่างไร?", options: [{ text: "รุกเข้าไปจีบก่อนแบบเนียนๆ", score: { k: 2, q: 0 } }, { text: "แอบมองอยู่ห่างๆ รอให้เขาเข้ามาทัก", score: { k: 0, q: 2 } }, { text: "ทำตัวกวนประสาทเรียกร้องความสนใจ", score: { k: 1, q: 1 } }, { text: "เขินจนทำตัวไม่ถูก เดินหนีไปตั้งหลัก", score: { k: 0, q: 1 } }] },
+            { q: "คู่ในอุดมคติของคุณควรเป็นแบบไหน?", options: [{ text: "ตัวเล็กกว่า น่ารัก ขี้อ้อน", score: { k: 2, q: 0 } }, { text: "ตัวโตกว่า ดูพึ่งพาได้ อบอุ่น", score: { k: 0, q: 2 } }, { text: "หุ่นล่ำบึ้ก มีกล้ามเนื้อดูแข็งแรง", score: { k: 1, q: 1 } }, { text: "แบบไหนก็ได้ ขอแค่คุยกันรู้เรื่อง", score: { k: 1, q: 1 } }] },
+            { q: "เวลาที่เกิดความขัดแย้ง คุณมักจะ...", options: [{ text: "ใช้เหตุผลคุมสถานการณ์และตัดสินใจ", score: { k: 2, q: 0 } }, { text: "ยอมๆ ไปก่อนเพื่อความสบายใจ", score: { k: 0, q: 2 } }, { text: "เงียบใส่จนกว่าอีกฝ่ายจะมาง้อ", score: { k: 0, q: 2 } }, { text: "เถียงสุดใจเอาชนะให้ได้", score: { k: 1, q: 0 } }] },
+            { q: "คุณชอบสกินชิพ (การสัมผัส) แบบไหนมากกว่า?", options: [{ text: "เป็นฝ่ายโอบกอด หรือลูบหัวอีกฝ่าย", score: { k: 2, q: 0 } }, { text: "ชอบเป็นฝ่ายถูกกอด หรือโดนลูบแก้ม", score: { k: 0, q: 2 } }, { text: "ชอบแกล้งจิ้มเอว หรือหยิกแก้มแรงๆ", score: { k: 1, q: 1 } }, { text: "ชอบแค่เดินจับมือกันเบาๆ", score: { k: 0, q: 1 } }] },
+            { q: "นิสัยส่วนตัวที่คนอื่นมักพูดถึงคุณบ่อยที่สุด?", options: [{ text: "ดูพึ่งพาได้ มีความเป็นผู้นำ", score: { k: 2, q: 0 } }, { text: "ขี้อ้อน น่ารักน่าแกล้ง", score: { k: 0, q: 2 } }, { text: "เย็นชาแต่ใจดี (ซึนเดระ)", score: { k: 1, q: 1 } }, { text: "เป็นคนร่าเริง สนุกสนาน", score: { k: 1, q: 1 } }] },
+            { q: "ถ้าต้องเลือกที่นั่งในโรงหนัง?", options: [{ text: "แถวหลังสุด เพื่อความเป็นส่วนตัว", score: { k: 1, q: 1 } }, { text: "ที่นั่งตรงกลางเพื่อให้เห็นชัดที่สุด", score: { k: 2, q: 0 } }, { text: "ที่นั่งริมทางเดิน เข้าออกสะดวก", score: { k: 0, q: 1 } }, { text: "แถวหน้าๆ อยากอินกับหนัง", score: { k: 0, q: 1 } }] },
+            { q: "เวลานอนกับแฟน คุณมักจะ...", options: [{ text: "เป็นคนกอด (Big Spoon)", score: { k: 2, q: 0 } }, { text: "เป็นคนถูกกอด (Small Spoon)", score: { k: 0, q: 2 } }, { text: "นอนกอดก่ายกันสลับไปมา", score: { k: 1, q: 1 } }, { text: "นอนแยกฝั่งกัน ชอบพื้นที่ส่วนตัว", score: { k: 1, q: 0 } }] },
+            { q: "เวลาไปเที่ยวต่างจังหวัด ใครเป็นคนนำ?", options: [{ text: "ฉันเอง วางแผนทริป จองที่พัก", score: { k: 2, q: 0 } }, { text: "ตามแฟนเลย แฟนไปไหนฉันไปนั่น", score: { k: 0, q: 2 } }, { text: "ช่วยกันตัดสินใจคนละครึ่งทาง", score: { k: 1, q: 1 } }, { text: "ด้นสดไปเรื่อยๆ ไม่ต้องวางแผน", score: { k: 1, q: 1 } }] },
+            { q: "สไตล์การแต่งตัวที่คุณมั่นใจที่สุด?", options: [{ text: "เสื้อเชิ้ต หรือชุดที่ดูภูมิฐาน เข้มๆ", score: { k: 2, q: 0 } }, { text: "เสื้อผ้าพาสเทล หรือแฟชั่นน่ารักๆ", score: { k: 0, q: 2 } }, { text: "แนวสตรีท เท่ๆ สปอร์ตๆ", score: { k: 1, q: 1 } }, { text: "ชุดเรียบง่าย เสื้อยืดกางเกงยีนส์", score: { k: 1, q: 1 } }] },
+            { q: "เมื่อไปร้านอาหารที่ต้องรอคิวนาน?", options: [{ text: "ยืนรออย่างใจเย็นและชวนแฟนคุย", score: { k: 2, q: 0 } }, { text: "เริ่มหงุดหงิด อ้อนแฟนให้พาไปร้านอื่น", score: { k: 0, q: 2 } }, { text: "ตัดสินใจไปร้านอื่นทันที", score: { k: 1, q: 0 } }, { text: "รอได้แต่แอบบ่นเงียบๆ", score: { k: 0, q: 1 } }] },
+            { q: "คำชมแบบไหนที่ทำให้คุณยิ้มไม่หุบ?", options: [{ text: "เท่จังเลย, ดูแลเก่งจัง", score: { k: 2, q: 0 } }, { text: "น่ารักจัง, วันนี้น่าเอ็นดูนะ", score: { k: 0, q: 2 } }, { text: "เก่งมาก, พึ่งพาได้จริงๆ", score: { k: 2, q: 0 } }, { text: "อยู่ด้วยแล้วมีความสุขที่สุดเลย", score: { k: 1, q: 2 } }] },
+            { q: "ถ้าเห็นแฟนทำหน้าเศร้า?", options: [{ text: "ดึงมากอดแล้วถามว่าเป็นอะไรครับ?", score: { k: 2, q: 0 } }, { text: "ทำตัวตลกๆ อ้อนให้เขาหายเศร้า", score: { k: 0, q: 2 } }, { text: "ซื้อของที่เขาชอบมาให้ทันที", score: { k: 1, q: 1 } }, { text: "ปล่อยให้เขาอยู่คนเดียวสักพัก", score: { k: 1, q: 0 } }] },
+            { q: "กิจกรรมยามว่างที่คุณชอบ?", options: [{ text: "ออกกำลังกาย หรือเล่นกีฬา", score: { k: 2, q: 0 } }, { text: "ช้อปปิ้ง หรือไปคาเฟ่ถ่ายรูป", score: { k: 0, q: 2 } }, { text: "เล่นเกม หรือดูซีรีส์", score: { k: 1, q: 1 } }, { text: "นอนพักผ่อนเฉยๆ", score: { k: 0, q: 1 } }] },
+            { q: "สไตล์การใช้จ่ายเงินของคุณ?", options: [{ text: "เป็นฝ่ายสายเปย์ ชอบเลี้ยงคนอื่น", score: { k: 2, q: 0 } }, { text: "ชอบให้แฟนเซอร์ไพรส์ด้วยของขวัญ", score: { k: 0, q: 2 } }, { text: "หารสองตลอด แฟร์ๆ ดี", score: { k: 1, q: 1 } }, { text: "ประหยัดมัธยัสถ์ วางแผนการเงินเก่ง", score: { k: 1, q: 0 } }] },
+            { q: "เครื่องดื่มที่บ่งบอกความเป็นคุณ?", options: [{ text: "อเมริกาโน่ หรือวิสกี้เข้มๆ", score: { k: 2, q: 0 } }, { text: "ชาไข่มุกหวานร้อย หรือม็อกเทล", score: { k: 0, q: 2 } }, { text: "ลาเต้อาร์ตสวยๆ", score: { k: 1, q: 1 } }, { text: "น้ำอัดลมสดชื่นๆ", score: { k: 0, q: 1 } }] },
+            { q: "เวลานัดเดท ใครควรไปถึงก่อน?", options: [{ text: "ฉันควรไปถึงก่อนเพื่อรอเขา", score: { k: 2, q: 0 } }, { text: "แฟนควรมาถึงก่อน (ฉันแอบสายเบาๆ)", score: { k: 0, q: 2 } }, { text: "ใครมาก่อนก็ได้ ไม่ซีเรียส", score: { k: 1, q: 1 } }, { text: "ต้องตรงเวลาทั้งคู่ เป๊ะๆ", score: { k: 1, q: 0 } }] },
+            { q: "เวลาเดินในห้าง คุณมักจะ...", options: [{ text: "จูงมือหรือโอบไหล่แฟน", score: { k: 2, q: 0 } }, { text: "เดินเกาะแขนแฟน หรือจับชายเสื้อ", score: { k: 0, q: 2 } }, { text: "เดินขนาบข้างกันเฉยๆ", score: { k: 1, q: 1 } }, { text: "เดินนำหน้าหรือตามหลังนิดหน่อย", score: { k: 1, q: 0 } }] },
+            { q: "ถ้าแฟนลืมวันสำคัญ?", options: [{ text: "ไม่เป็นไร ฉันจำได้และจัดงานให้เอง", score: { k: 2, q: 0 } }, { text: "งอนหนักมาก รอให้เขามาง้อ", score: { k: 0, q: 2 } }, { text: "ทวงถามตรงๆ ไม่ต้องรอ", score: { k: 1, q: 1 } }, { text: "แอบน้อยใจแต่ไม่บอก", score: { k: 0, q: 1 } }] },
+            { q: "คุณชอบดูซีรีส์แนวไหน?", options: [{ text: "แอคชั่น ดราม่าหนักๆ", score: { k: 2, q: 0 } }, { text: "โรแมนติก กุ๊กกิ๊ก พีเรียด", score: { k: 0, q: 2 } }, { text: "สืบสวนสอบสวน สยองขวัญ", score: { k: 1, q: 1 } }, { text: "ตลกฮาๆ ไม่เครียด", score: { k: 1, q: 1 } }] },
+            { q: "เวลามีปัญหากับที่บ้าน?", options: [{ text: "ปรึกษาแฟนและพยายามแก้ปัญหา", score: { k: 2, q: 0 } }, { text: "ระบายกับแฟนเพื่อขอกำลังใจ", score: { k: 0, q: 2 } }, { text: "เก็บไว้คนเดียว ไม่อยากให้แฟนเครียด", score: { k: 1, q: 0 } }, { text: "ประชดที่บ้านเพื่อให้แฟนสนใจ", score: { k: 0, q: 1 } }] },
+            { q: "ถ้าแฟนมีคนมาตามจีบ?", options: [{ text: "แสดงตัวเป็นเจ้าของอย่างนุ่มนวล", score: { k: 2, q: 0 } }, { text: "ทำตัวน่ารักกว่าเดิมมัดใจแฟน", score: { k: 0, q: 2 } }, { text: "หึงโหดและจัดการขั้นเด็ดขาด", score: { k: 1, q: 0 } }, { text: "ไม่สนใจ เชื่อใจแฟน 100%", score: { k: 1, q: 1 } }] },
+            { q: "เวลาไปฟิตเนส คุณชอบเน้นส่วนไหน?", options: [{ text: "อกและไหล่ (ให้ดูตัวหนา)", score: { k: 2, q: 0 } }, { text: "หน้าท้องและสะโพก (ให้ดูสมส่วน)", score: { k: 0, q: 2 } }, { text: "เน้นคาร์ดิโอให้หุ่นเฟิร์ม", score: { k: 1, q: 1 } }, { text: "ไม่ชอบออกกำลังกาย", score: { k: 0, q: 1 } }] },
+            { q: "สไตล์การแชทข้อความ?", options: [{ text: "สั้นๆ ได้ใจความ 'อยู่ไหน' 'ทำไร'", score: { k: 2, q: 0 } }, { text: "ใช้สติกเกอร์เยอะๆ อ้อนเก่ง", score: { k: 0, q: 2 } }, { text: "ถามสารทุกข์สุกดิบละเอียด", score: { k: 1, q: 1 } }, { text: "ส่งรูปตลกๆ ไปกวนประสาท", score: { k: 1, q: 1 } }] },
+            { q: "ถ้าได้เป็นตัวละครในนิยาย?", options: [{ text: "มาเฟียจอมโหดแต่โหมดรักเดียว", score: { k: 2, q: 0 } }, { text: "คุณหนูขี้วีนที่แอบขี้เหงา", score: { k: 0, q: 2 } }, { text: "ประธานบริษัทมาดนิ่ง", score: { k: 2, q: 0 } }, { text: "พนักงานออฟฟิศที่ดูธรรมดา", score: { k: 1, q: 1 } }] },
+            { q: "ของขวัญที่อยากได้จากแฟน?", options: [{ text: "นาฬิกา หรือของที่ใช้ได้จริง", score: { k: 2, q: 0 } }, { text: "เครื่องประดับ หรือน้ำหอมหอมๆ", score: { k: 0, q: 2 } }, { text: "ทริปไปเที่ยวต่างประเทศ", score: { k: 1, q: 1 } }, { text: "แค่การ์ดที่เขียนความรู้สึกก็พอ", score: { k: 0, q: 1 } }] },
+            { q: "เวลาหน้าแดงเพราะเขิน?", options: [{ text: "พยายามทำหน้าดุ กลบเกลื่อน", score: { k: 2, q: 0 } }, { text: "เอามือปิดหน้า หรือซุกไหล่แฟน", score: { k: 0, q: 2 } }, { text: "หัวเราะแก้เขินดังๆ", score: { k: 1, q: 1 } }, { text: "จ้องกลับท้าทายทั้งที่เขิน", score: { k: 1, q: 0 } }] },
+            { q: "มุมมองเรื่องเซ็กส์?", options: [{ text: "เน้นการดูแลและตามใจอีกฝ่าย", score: { k: 2, q: 0 } }, { text: "เน้นความนุ่มนวลและอ่อนโยน", score: { k: 0, q: 2 } }, { text: "ต้องเร่าร้อนและตื่นเต้น", score: { k: 1, q: 1 } }, { text: "แบบไหนก็ได้ตามฟีลลิ่ง", score: { k: 1, q: 1 } }] },
+            { q: "ถ้าต้องเลือกสัตว์ที่เหมือนตัวเอง?", options: [{ text: "สิงโต หรือ สุนัขพันธุ์ใหญ่", score: { k: 2, q: 0 } }, { text: "แมวขี้อ้อน หรือ กระต่าย", score: { k: 0, q: 2 } }, { text: "จิ้งจอกเจ้าเล่ห์", score: { k: 1, q: 1 } }, { text: "โลมาขี้เล่น", score: { k: 0, q: 1 } }] },
+            { q: "เวลาเห็นเด็กน้อยน่ารักๆ?", options: [{ text: "มองดูเฉยๆ แต่ยิ้มมุมปาก", score: { k: 1, q: 0 } }, { text: "เข้าไปเล่นด้วย ทำเสียงสอง", score: { k: 0, q: 2 } }, { text: "คุยกับแฟนเรื่องอยากมีลูก", score: { k: 1, q: 1 } }, { text: "ไม่ได้รู้สึกอะไรเป็นพิเศษ", score: { k: 1, q: 0 } }] },
+            { q: "เมื่อโดนล้อว่าเป็นควีน (หรือคิง)?", options: [{ text: "หัวเราะรับและเล่นมุกกลับ", score: { k: 1, q: 1 } }, { text: "หน้าแดงแล้วบอกว่า 'ไม่ใช่ซะหน่อย!'", score: { k: 0, q: 2 } }, { text: "จ้องหน้าด้วยสายตาเย็นชา", score: { k: 2, q: 0 } }, { text: "ไม่สนใจ ใครจะพูดยังไงก็ได้", score: { k: 1, q: 0 } }] },
+            { q: "คุณชอบอากาศแบบไหน?", options: [{ text: "หนาวๆ จะได้กอดคนรักแน่นๆ", score: { k: 1, q: 1 } }, { text: "ฝนตก บรรยากาศเหงาๆ เหว่ว้า", score: { k: 0, q: 2 } }, { text: "แดดจัด ออกไปทำกิจกรรมลุยๆ", score: { k: 2, q: 0 } }, { text: "เย็นสบายๆ เดินเล่นรับลม", score: { k: 0, q: 1 } }] },
+            { q: "ถ้าแฟนบอกเลิก?", options: [{ text: "ยื้อให้ถึงที่สุดและพยายามแก้ไข", score: { k: 2, q: 0 } }, { text: "ร้องไห้เสียสติ และอ้อนวอน", score: { k: 0, q: 2 } }, { text: "ยอมรับความจริงและจากไปอย่างเท่ๆ", score: { k: 1, q: 0 } }, { text: "หาคนใหม่ทันทีเพื่อลืมคนเก่า", score: { k: 1, q: 0 } }] },
+            { q: "สุดท้าย... คุณอยากได้คนแบบไหนมาเคียงข้าง?", options: [{ text: "คนที่ยอมและเชื่อฟังฉัน", score: { k: 2, q: 0 } }, { text: "คนที่ดูแลและตัดสินใจแทนฉันได้", score: { k: 0, q: 2 } }, { text: "คนที่พร้อมลุยและสนุกไปด้วยกัน", score: { k: 1, q: 1 } }, { text: "คนที่เข้าใจตัวตนที่แท้จริงของฉัน", score: { k: 1, q: 1 } }] }
+        ];
+
+        let currentQuestion = 0;
+        let totalKing = 0;
+        let totalQueen = 0;
+
+        function startQuiz() {
+            document.getElementById('start-screen').classList.add('hidden');
+            document.getElementById('quiz-screen').classList.remove('hidden');
+            showQuestion();
+            lucide.createIcons();
+        }
+
+        function showQuestion() {
+            const q = questions[currentQuestion];
+            document.getElementById('question-number').innerText = `ข้อที่ ${currentQuestion + 1}/${questions.length}`;
+            document.getElementById('question-text').innerText = q.q;
+            document.getElementById('progress').style.width = `${((currentQuestion + 1) / questions.length) * 100}%`;
+            
+            const optionsContainer = document.getElementById('options');
+            optionsContainer.innerHTML = '';
+            
+            q.options.forEach((opt, index) => {
+                const btn = document.createElement('button');
+                btn.className = 'option-btn';
+                btn.innerText = opt.text;
+                btn.onclick = () => selectOption(opt.score);
+                optionsContainer.appendChild(btn);
+            });
+        }
+
+        function selectOption(score) {
+            totalKing += score.k;
+            totalQueen += score.q;
+            
+            currentQuestion++;
+            if (currentQuestion < questions.length) {
+                showQuestion();
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            } else {
+                showResult();
+            }
+        }
+
+        function showResult() {
+            document.getElementById('quiz-screen').classList.add('hidden');
+            document.getElementById('result-screen').classList.remove('hidden');
+            
+            const total = totalKing + totalQueen;
+            const kingPercent = Math.round((totalKing / total) * 100);
+            const queenPercent = Math.round((totalQueen / total) * 100);
+            
+            document.getElementById('king-score').innerText = `${kingPercent}%`;
+            document.getElementById('queen-score').innerText = `${queenPercent}%`;
+            
+            const title = document.getElementById('result-title');
+            const desc = document.getElementById('result-desc');
+            const iconContainer = document.getElementById('result-icon');
+            
+            if (kingPercent >= 70) {
+                title.innerText = "มหาเทพคิง (Dominant King)";
+                title.className = "text-4xl font-bold mb-4 text-blue-700";
+                desc.innerText = "คุณมีความเป็นผู้นำสูงส่ง! รักในความสมบูรณ์แบบ ชอบการควบคุมและปกป้อง เสน่ห์ของคุณคือความเด็ดขาดที่แฝงไปด้วยความอบอุ่น ใครอยู่ใกล้ก็ต้องรู้สึกเกรงใจและปลอดภัย";
+                iconContainer.innerHTML = '<div class="bg-blue-100 p-6 rounded-full shadow-inner"><i data-lucide="crown" class="w-16 h-16 text-blue-700"></i></div>';
+            } else if (queenPercent >= 70) {
+                title.innerText = "นางพญาควีน (Ethereal Queen)";
+                title.className = "text-4xl font-bold mb-4 text-purple-700";
+                desc.innerText = "คุณคือควีนที่มีระดับ! รู้วิธีบริหารเสน่ห์ให้คนอื่นหลงใหล มีความละเอียดอ่อนทางอารมณ์สูง และมักจะเป็นศูนย์กลางของความสนใจเสมอ ทุกย่างก้าวของคุณเต็มไปด้วยแรงดึงดูด";
+                iconContainer.innerHTML = '<div class="bg-purple-100 p-6 rounded-full shadow-inner"><i data-lucide="gem" class="w-16 h-16 text-purple-700"></i></div>';
+            } else if (kingPercent > 50) {
+                 title.innerText = "คิงสายละมุน (Gentle King)";
+                title.className = "text-4xl font-bold mb-4 text-sky-600";
+                desc.innerText = "คุณคือคิงสายซัพพอร์ต ไม่เน้นใช้อำนาจแต่เน้นใช้ใจดูแล เป็นคนที่คนอื่นอยู่ด้วยแล้วรู้สึกสบายใจที่สุด มีความเป็นคิงที่เข้าถึงง่ายและเป็นกันเอง";
+                iconContainer.innerHTML = '<div class="bg-sky-100 p-6 rounded-full shadow-inner"><i data-lucide="shield" class="w-16 h-16 text-sky-600"></i></div>';
+            } else if (queenPercent > 50) {
+                 title.innerText = "ควีนสายสตรอง (Power Queen)";
+                title.className = "text-4xl font-bold mb-4 text-rose-500";
+                desc.innerText = "คุณเป็นควีนที่ไม่ยอมคน! มีความมั่นใจในตัวเองสูงและไม่กลัวที่จะเป็นฝ่ายรุกในบางครั้ง เป็นประเภทที่ดูเหมือนจะรับแต่ความจริงแล้วคุณคือคนคุมเกมที่แท้จริง";
+                iconContainer.innerHTML = '<div class="bg-rose-100 p-6 rounded-full shadow-inner"><i data-lucide="zap" class="w-16 h-16 text-rose-500"></i></div>';
+            } else {
+                title.innerText = "สายสมดุล (Versatile King/Queen)";
+                title.className = "text-4xl font-bold mb-4 text-indigo-600";
+                desc.innerText = "คุณคือส่วนผสมที่สมบูรณ์แบบที่สุด! ปรับเปลี่ยนได้ทุกสถานการณ์ เป็นคิงก็ได้เป็นควีนก็ดี ความยืดหยุ่นของคุณคือเสน่ห์ที่ลึกลับและน่าค้นหาที่สุด";
+                iconContainer.innerHTML = '<div class="bg-indigo-100 p-6 rounded-full shadow-inner"><i data-lucide="refresh-cw" class="w-16 h-16 text-indigo-600"></i></div>';
+            }
+            lucide.createIcons();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function resetQuiz() {
+            currentQuestion = 0;
+            totalKing = 0;
+            totalQueen = 0;
+            document.getElementById('result-screen').classList.add('hidden');
+            document.getElementById('start-screen').classList.remove('hidden');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        window.onload = () => {
+            lucide.createIcons();
+        };
+    </script>
+</body>
+</html>
